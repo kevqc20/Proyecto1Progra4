@@ -58,7 +58,7 @@
                     <button type="submit" class="btn btn-primary btn-block">Acceder</button>
                 </div>
             </form>
-            <p class="text-center small">¿No tienes cuenta? <a href="../presentation/registro/View.jsp">¡Registrate aquí!</a>.</p>
+            <p class="text-center small">¿No tienes cuenta? <a href="/Proyecto1/presentation/registro/View.jsp">¡Registrate aquí!</a>.</p>
         </div>
 
         <div class="container-xl">
