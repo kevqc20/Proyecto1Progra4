@@ -39,8 +39,7 @@
                             <div class="col-sm-6">
                                 <h2>Listado de <b>Proveedores</b></h2>
                             </div>
-                            <div class="col-sm-6">
-                                <a href="#addProveedorModal" class="btn btn-success" data-toggle="modal"><i class="material-icons">&#xE147;</i> <span>Añadir</span></a>						
+                            <div class="col-sm-6">				
                             </div>
                         </div>
                     </div>
@@ -58,7 +57,6 @@
                                 <th>Distrito</th>
                                 <th>Otras señas</th>
                                 <th>Activo</th>  
-                                <th></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -76,9 +74,6 @@
                                 <td><%= c.getUbicacion().getDistrito()%></td>
                                 <td><%= c.getUbicacion().getOtrasSenas()%></td>
                                 <td><%= c.getUsuario().getActivo()%></td>
-                                <td>
-                                    <a href="#editProveedorModal" class="edit" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
-                                </td>
                             </tr> 
 
                             <%}%>
@@ -86,156 +81,6 @@
                     </table>
                 </div>
             </div>        
-        </div>
-        <!-- Edit Modal HTML -->
-        <div id="addProveedorModal" class="modal fade">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">						
-                        <h4 class="modal-title">Registrar Proveedor</h4>
-                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    </div>
-                    <div class="modal-body">
-                        <form>
-                            <div class="form-group">
-                                <input type="text" class="form-control" name="identificacion" placeholder="Identificación" required="required">
-                            </div>
-                            <div class="form-group">
-                                <input type="password" class="form-control" name="password" placeholder="Password" required="required">
-                            </div>    
-
-                            <div class="form-group">
-                                <input type="text" class="form-control" name="nombre" placeholder="Nombre de la empresa" required="required">
-                            </div>
-                            <div class="form-group">
-                                <input type="text" class="form-control" name="nombreComercial" placeholder="Nombre comercial de la empresa">
-                            </div>  
-                            <div class="form-group">
-                                <input type="email" class="form-control" name="email" placeholder="Correo electrónico" required="required">
-                            </div>
-                            <div class="form-group">
-                                <div class="row">
-                                    <div class="col"><input type="number" class="form-control" name="areaCode" min='0'>Codigo del país</div>
-                                    <div class="col"><input type="number" class="form-control" name="tel" min='0' max='99999999999999999999'>Teléfono</div>
-                                </div>        	
-                            </div>
-                            <div class="form-group">
-                                <div class="row">
-                                    <div class="col">
-                                        <select class="custom-select">
-                                            <option selected>Provincia</option>
-                                            <option value="1">One</option>
-                                            <option value="2">Two</option>
-                                            <option value="3">Three</option>
-                                        </select>
-                                    </div>
-                                    <div class="col">
-                                        <select class="custom-select">
-                                            <option selected>Cantón</option>
-                                            <option value="1">One</option>
-                                            <option value="2">Two</option>
-                                            <option value="3">Three</option>
-                                        </select>
-                                    </div>
-                                    <div class="col">
-                                        <select class="custom-select">
-                                            <option selected>Distrito</option>
-                                            <option value="1">One</option>
-                                            <option value="2">Two</option>
-                                            <option value="3">Three</option>
-                                        </select>
-                                    </div>
-                                </div> 
-                            </div>
-                            <div class="form-group">
-                                <input type="text" class="form-control" name="otrasSenas" placeholder="Otras Señas">
-                            </div>
-                            <div class="modal-footer">
-                                <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancelar">
-                                <input type="submit" class="btn btn-success" value="Añadir">
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- Edit Modal HTML -->
-        <div id="editProveedorModal" class="modal fade">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <form>
-                        <div class="modal-header">						
-                            <h4 class="modal-title">Editar Proveedor</h4>
-                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                        </div>
-                        <div class="modal-body">					
-                            <div class="form-group">
-                                <input type="text" class="form-control" name="identificacion" placeholder="Identificación" disabled>
-                            </div>
-                            <div class="form-group">
-                                <input type="text" class="form-control" name="nombre" placeholder="Nombre de la empresa" required="required">
-                            </div>
-                            <div class="form-group">
-                                <input type="text" class="form-control" name="nombreComercial" placeholder="Nombre comercial de la empresa">
-                            </div>  
-                            <div class="form-group">
-                                <input type="email" class="form-control" name="email" placeholder="Correo electrónico" required="required">
-                            </div>
-                            <div class="form-group">
-                                <div class="row">
-                                    <div class="col"><input type="number" class="form-control" name="areaCode" min='0'>Codigo del país</div>
-                                    <div class="col"><input type="number" class="form-control" name="tel" min='0' max='99999999999999999999'>Teléfono</div>
-                                </div>        	
-                            </div>
-                            <div class="form-group">
-                                <div class="row">
-                                    <div class="col">
-                                        <select class="custom-select">
-                                            <option selected>Provincia</option>
-                                            <option value="1">One</option>
-                                            <option value="2">Two</option>
-                                            <option value="3">Three</option>
-                                        </select>
-                                    </div>
-                                    <div class="col">
-                                        <select class="custom-select">
-                                            <option selected>Cantón</option>
-                                            <option value="1">One</option>
-                                            <option value="2">Two</option>
-                                            <option value="3">Three</option>
-                                        </select>
-                                    </div>
-                                    <div class="col">
-                                        <select class="custom-select">
-                                            <option selected>Distrito</option>
-                                            <option value="1">One</option>
-                                            <option value="2">Two</option>
-                                            <option value="3">Three</option>
-                                        </select>
-                                    </div>
-                                </div> 
-                            </div>
-                            <div class="form-group">
-                                <input type="text" class="form-control" name="otrasSenas" placeholder="Otras Señas">
-                            </div>
-                            <div class="form-group">
-                                <div class="row">
-                                    <div class="col">Activo</div>
-                                    <div class="col">
-                                        <span class="input-group-text">
-                                            <input type="checkbox">
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancelar">
-                            <input type="submit" class="btn btn-info" value="Guardar">
-                        </div>
-                    </form>
-                </div>
-            </div>
         </div>
     </body>
     <%@ include file="/presentation/Footer.jsp" %>
