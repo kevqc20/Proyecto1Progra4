@@ -5,8 +5,6 @@
  */
 package factura.logic;
 
-import java.util.Objects;
-
 /**
  *
  * @author Escinf
@@ -16,10 +14,10 @@ public class Proveedor implements java.io.Serializable {
     String nombre;    
     String nombreComercial;   
     String correoElectronico;
-    Integer telefono;
-    String ubicacion;
+    TelefonoType telefono;
+    UbicacionType ubicacion;
 
-    public Proveedor(Usuario usuario, String nombre, String nombreComercial, String correoElectronico, Integer telefono, String ubicacion) {
+    public Proveedor(Usuario usuario, String nombre, String nombreComercial, String correoElectronico, TelefonoType telefono, UbicacionType ubicacion) {
         this.usuario = usuario;
         this.nombre = nombre;
         this.nombreComercial = nombreComercial;
@@ -27,6 +25,7 @@ public class Proveedor implements java.io.Serializable {
         this.telefono = telefono;
         this.ubicacion = ubicacion;
     }
+
 
     public String getNombre() {
         return nombre;
@@ -44,20 +43,44 @@ public class Proveedor implements java.io.Serializable {
         this.usuario = usuario;
     }
 
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final Proveedor other = (Proveedor) obj;
-        return Objects.equals(this.usuario.getIdentificacion(), other.usuario.getIdentificacion());
+    public String getNombreComercial() {
+        return nombreComercial;
     }
+
+    public void setNombreComercial(String nombreComercial) {
+        this.nombreComercial = nombreComercial;
+    }
+
+    public String getCorreoElectronico() {
+        return correoElectronico;
+    }
+
+    public void setCorreoElectronico(String correoElectronico) {
+        this.correoElectronico = correoElectronico;
+    }
+
+    public TelefonoType getTelefono() {
+        return telefono;
+    }
+
+    public void setTelefono(TelefonoType telefono) {
+        this.telefono = telefono;
+    }
+
+    public UbicacionType getUbicacion() {
+        return ubicacion;
+    }
+
+    public void setUbicacion(UbicacionType ubicacion) {
+        this.ubicacion = ubicacion;
+    }
+
+    @Override
+    public String toString() {
+        return "Proveedor{" + "usuario=" + usuario.toString() + ", nombre=" + nombre + "\n nombreComercial=" + nombreComercial + ", correoElectronico=" + correoElectronico + "\n telefono=" + telefono.toString() + ", ubicacion=" + ubicacion.toString() + '}';
+    }
+
+
 
     
 }

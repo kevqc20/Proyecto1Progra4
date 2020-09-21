@@ -2,6 +2,14 @@
     Document   : cuentas
     Author     : kevin
 --%>
+<%@page import="factura.presentation.administrador.Model"%>
+<%@page import="java.util.List"%>
+<%@page import="java.util.ArrayList"%>
+<%@page import="factura.logic.Proveedor"%>
+<%
+    Model model = (Model) request.getAttribute("model");
+    List<Proveedor> cuentas = model.getCuentas();
+%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -18,7 +26,7 @@
         <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
-        <title>Administrador - Listado</title>
+        <title>Proveedores</title>
         <%@ include file="/presentation/Header.jsp" %>
     </head>
     <body>
@@ -53,38 +61,26 @@
                             </tr>
                         </thead>
                         <tbody>
+                            <% for (Proveedor c : cuentas) {%>
+
                             <tr>
-                                <td>123</td>
-                                <td>Empresa1</td>
-                                <td>Empresa1</td>
-                                <td>empresa1@mail.com</td>
-                                <td>171</td>
-                                <td>5552222</td>
-                                <td>Alajuela</td>
-                                <td>Alajuela</td>
-                                <td>Alajuela</td>
-                                <td>Alajuela</td>
-                                <td>Si</td>
+                                <td><a href="/Guia/presentation/cliente/cuenta/show?numeroFld=<%=c.getUsuario().getIdentificacion()%>"><%=c.getUsuario().getIdentificacion()%></td>
+                                <td><%= c.getNombre()%></td>
+                                <td><%= c.getNombreComercial()%></td>
+                                <td><%= c.getCorreoElectronico()%></td>
+                                <td><%= c.getTelefono().getCodigoPais()%></td>
+                                <td><%= c.getTelefono().getNumTelefono()%></td>
+                                <td><%= c.getUbicacion().getProvincia()%></td>
+                                <td><%= c.getUbicacion().getCanton()%></td>
+                                <td><%= c.getUbicacion().getDistrito()%></td>
+                                <td><%= c.getUbicacion().getOtrasSenas()%></td>
+                                <td><%= c.getUsuario().getActivo()%></td>
                                 <td>
                                     <a href="#editProveedorModal" class="edit" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
                                 </td>
-                            </tr>
-                            <tr>
-                                <td>456</td>
-                                <td>Empresa2</td>
-                                <td>Empresa2</td>
-                                <td>empresa2@mail.com</td>
-                                <td>171</td>
-                                <td>5552222</td>
-                                <td>SJ</td>
-                                <td>SJ</td>
-                                <td>SJ</td>
-                                <td>SJ</td>
-                                <td>Si</td>
-                                <td>
-                                    <a href="#editProveedorModal" class="edit" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
-                                </td>
-                            </tr>
+                            </tr> 
+
+                            <%}%>
                         </tbody>
                     </table>
                 </div>
@@ -154,8 +150,8 @@
                                 <input type="text" class="form-control" name="otrasSenas" placeholder="Otras Señas">
                             </div>
                             <div class="modal-footer">
-                                <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
-                                <input type="submit" class="btn btn-success" value="Add">
+                                <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancelar">
+                                <input type="submit" class="btn btn-success" value="Añadir">
                             </div>
                         </form>
                     </div>
@@ -233,8 +229,8 @@
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
-                            <input type="submit" class="btn btn-info" value="Save">
+                            <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancelar">
+                            <input type="submit" class="btn btn-info" value="Guardar">
                         </div>
                     </form>
                 </div>

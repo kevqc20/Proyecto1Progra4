@@ -1,8 +1,10 @@
 <%-- 
-    Document   : Header
+    Document   : Index
     Author     : kevin
 --%>
-
+<%@page import="java.util.HashMap"%>
+<%@page import="java.util.Map"%>
+<%@page import="factura.presentation.login.Model"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -14,17 +16,23 @@
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:400,500|Open+Sans">
         <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-
+        <link href="../../css/default.css" rel="stylesheet" type="text/css"/>
         <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>        
-        <link href="../css/default.css" rel="stylesheet" type="text/css"/>
+
         <title>Página principal</title>    
-        <%@ include file="/presentation/Header.jsp" %>
+
     </head>
     <body>
+        <%@ include file="/presentation/Header.jsp" %>
+
+        <% Model model = (Model) request.getAttribute("model"); %>
+        <% Map<String, String> errores = (Map<String, String>) request.getAttribute("errores"); %>
+        <% Map<String, String[]> form = (errores == null) ? this.getForm(model) : request.getParameterMap();%>
+
         <div class="login-form">
-            <form action="" method="post">
+            <form name="form" action="/Proyecto1/presentation/login/login" method="post">
                 <h2 class="text-center">Iniciar sesión</h2>   
                 <div class="form-group">
                     <div class="input-group">
@@ -33,7 +41,7 @@
                                 <span class="fa fa-user"></span>
                             </span>                    
                         </div>
-                        <input type="text" class="form-control" placeholder="Usuario" required="required">
+                        <input type="text" class="<%=erroneo("cedulaFld",errores)%>" placeholder="Usuario" name="cedulaFld" required="required" value="<%=form.get("cedulaFld")[0]%>" title="<%=title("cedulaFld",errores)%>">
                     </div>
                 </div>
                 <div class="form-group">
@@ -43,7 +51,7 @@
                                 <i class="fa fa-lock"></i>
                             </span>                    
                         </div>
-                        <input type="password" class="form-control" placeholder="Contraseña" required="required">
+                        <input type="password" class="<%=erroneo("claveFld",errores)%>" placeholder="Contraseña" required="required" name="claveFld" value="<%=form.get("claveFld")[0]%>" title="<%=title("claveFld",errores)%>">
                     </div>
                 </div>        
                 <div class="form-group">
@@ -52,6 +60,7 @@
             </form>
             <p class="text-center small">¿No tienes cuenta? <a href="../presentation/registro/View.jsp">¡Registrate aquí!</a>.</p>
         </div>
+
         <div class="container-xl">
             <div class="row">
                 <div class="col-lg-12">
@@ -105,3 +114,32 @@
     </body>
     <%@ include file="/presentation/Footer.jsp" %>
 </html>
+
+
+<%!
+    private String erroneo(String campo, Map<String, String> errores) {
+        if ((errores != null) && (errores.get(campo) != null)) {
+            return "form-control is-invalid";
+        } else {
+            return "form-control";
+        }
+    }
+
+    private String title(String campo, Map<String, String> errores) {
+        if ((errores != null) && (errores.get(campo) != null)) {
+            return errores.get(campo);
+        } else {
+            return "";
+        }
+    }
+
+    private Map<String, String[]> getForm(Model model) {
+        Map<String, String[]> values = new HashMap<>();
+        if (model.getCurrent() != null) {
+            values.put("cedulaFld", new String[]{model.getCurrent().getIdentificacion()});
+            values.put("claveFld", new String[]{model.getCurrent().getPassword()});
+        } else {
+        }
+        return values;
+    }
+%> 

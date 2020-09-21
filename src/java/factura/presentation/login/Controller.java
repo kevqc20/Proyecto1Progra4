@@ -18,118 +18,121 @@ import javax.servlet.http.HttpSession;
 
 /**
  *
- * @author jsanchez
+ * @author kev
  */
-@WebServlet(name = "LoginController", urlPatterns = {"/presentation/login/show","/presentation/login/login","/presentation/login/logout"})
+@WebServlet(name = "LoginController", urlPatterns = {"/presentation/login/show", "/presentation/login/login", "/presentation/login/logout"})
 public class Controller extends HttpServlet {
 
-  protected void processRequest(HttpServletRequest request, 
-                                HttpServletResponse response)
-         throws ServletException, IOException {
-      
-        request.setAttribute("model", new Model()); 
-        
-        String viewUrl="";
-        switch(request.getServletPath()){
+    protected void processRequest(HttpServletRequest request,
+            HttpServletResponse response)
+            throws ServletException, IOException {
+
+        request.setAttribute("model", new Model());
+
+        String viewUrl = "";
+        switch (request.getServletPath()) {
             case "/presentation/login/show":
-                viewUrl=this.show(request);
-                break;              
+                viewUrl = this.show(request);
+                break;
             case "/presentation/login/login":
-                //viewUrl=this.login(request);
-                break;            
+                viewUrl = this.login(request);
+                break;
             case "/presentation/login/logout":
-                viewUrl=this.logout(request);
+                viewUrl = this.logout(request);
                 break;
         }
-        request.getRequestDispatcher(viewUrl).forward( request, response); 
-  }
-
-  /*
-    private String login(HttpServletRequest request) { 
-        try{
-            Map<String,String> errores =  this.validar(request);
-            if(errores.isEmpty()){
-                this.updateModel(request);          
-                return this.loginAction(request);
-            }
-            else{
-                request.setAttribute("errores", errores);
-                return "/presentation/login/View.jsp"; 
-            }            
-        }
-        catch(Exception e){
-            return "/presentation/Error.jsp";             
-        }         
+        request.getRequestDispatcher(viewUrl).forward(request, response);
     }
-    */
-  
-    Map<String,String> validar(HttpServletRequest request){
-        Map<String,String> errores = new HashMap<>();
-        if (request.getParameter("cedulaFld").isEmpty()){
-            errores.put("cedulaFld","Cedula requerida");
+
+    private String login(HttpServletRequest request) {
+        try {
+            Map<String, String> errores = this.validar(request);
+            if (errores.isEmpty()) {
+                this.updateModel(request);
+                return this.loginAction(request);
+            } else {
+                request.setAttribute("errores", errores);
+                return "/presentation/Index.jsp";
+            }
+        } catch (Exception e) {
+            return "/presentation/Index.jsp";
+        }
+    }
+
+    Map<String, String> validar(HttpServletRequest request) {
+        Map<String, String> errores = new HashMap<>();
+        if (request.getParameter("cedulaFld").isEmpty()) {
+            errores.put("cedulaFld", "Cedula requerida");
         }
 
-        if (request.getParameter("claveFld").isEmpty()){
-            errores.put("claveFld","Clave requerida");
+        if (request.getParameter("claveFld").isEmpty()) {
+            errores.put("claveFld", "Clave requerida");
         }
         return errores;
     }
-    
-    void updateModel(HttpServletRequest request){
-       Model model= (Model) request.getAttribute("model");
-       
-        //model.getCurrent().setCedula(request.getParameter("cedulaFld"));
-        //model.getCurrent().setClave(request.getParameter("claveFld"));
-   }
 
-        /*
+    void updateModel(HttpServletRequest request) {
+        Model model = (Model) request.getAttribute("model");
+
+        model.getCurrent().setIdentificacion(request.getParameter("cedulaFld"));
+        model.getCurrent().setPassword(request.getParameter("claveFld"));
+    }
+
     public String loginAction(HttpServletRequest request) {
-        Model model= (Model) request.getAttribute("model");
-        banca.logic.Model  domainModel = banca.logic.Model.instance();
+        Model model = (Model) request.getAttribute("model");
+        factura.logic.Model domainModel = factura.logic.Model.instance();
         HttpSession session = request.getSession(true);
+        String aux = model.getCurrent().getIdentificacion();
         try {
-            Usuario real = domainModel.usuarioFind(model.getCurrent().getCedula(),model.getCurrent().getClave());
-            session.setAttribute("usuario", real);
-            String viewUrl="";
-            switch(real.getTipo()){
-                case 1:
-                    viewUrl="/presentation/cliente/cuentas/show";
-                    break;
-                case 2:
-                     viewUrl="";
-                    break;             
+            domainModel.getServUsuario().obtenerUsuario(aux)
+                    .ifPresent(e -> request.setAttribute("usuario", (Usuario) e));
+            Usuario real = (Usuario) request.getAttribute("usuario");
+            String viewUrl = "";
+            if (real.getPassword() == null ? request.getParameter("claveFld") == null : real.getPassword().equals(request.getParameter("claveFld"))) {
+                switch (real.getTipoUsuario()) {
+                    case 0:
+                        viewUrl = "/presentation/administrador/listarProveedores/show";
+                        break;
+                    case 1:
+                        viewUrl = "/presentation/proveedor/configuracion/View.jsp";
+                        break;
+                }
+                session.setAttribute("usuario", real);
+            } else {
+                throw new Exception();
             }
             return viewUrl;
-        } catch (Exception ex) {
-            Map<String,String> errores = new HashMap<>();
+        } catch (Exception exception) {
+            System.out.println(exception.getClass().getCanonicalName());
+            Map<String, String> errores = new HashMap<>();
             request.setAttribute("errores", errores);
-            errores.put("cedulaFld","Usuario o clave incorrectos");
-            errores.put("claveFld","Usuario o clave incorrectos");
-            return "/presentation/login/View.jsp"; 
-        }        
-    }   
-*/
-    public String logout(HttpServletRequest request){
+            errores.put("cedulaFld", "Usuario o clave incorrectos");
+            errores.put("claveFld", "Usuario o clave incorrectos");
+            return "/presentation/login/show";
+        }
+    }
+
+    public String logout(HttpServletRequest request) {
         return this.logoutAction(request);
     }
-    
-    public String logoutAction(HttpServletRequest request){
+
+    public String logoutAction(HttpServletRequest request) {
         HttpSession session = request.getSession(true);
         session.removeAttribute("usuario");
         session.invalidate();
-        return "/presentation/Index.jsp";   
+        return "/presentation/login/show";
     }
 
-    public String show(HttpServletRequest request){
+    public String show(HttpServletRequest request) {
         return this.showAction(request);
     }
-        
-    public String showAction(HttpServletRequest request){
-        Model model= (Model) request.getAttribute("model");
-        //model.getCurrent().setCedula("");
-        //model.getCurrent().setClave("");
-        return "/presentation/login/View.jsp"; 
-    }    
+
+    public String showAction(HttpServletRequest request) {
+        Model model = (Model) request.getAttribute("model");
+        model.getCurrent().setIdentificacion("");
+        model.getCurrent().setPassword("");
+        return "/presentation/Index.jsp";
+    }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
@@ -170,5 +173,4 @@ public class Controller extends HttpServlet {
         return "Short description";
     }// </editor-fold>
 
-    
 }

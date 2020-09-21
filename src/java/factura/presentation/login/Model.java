@@ -9,7 +9,7 @@ import factura.logic.Usuario;
 
 /**
  *
- * @author jsanchez
+ * @author kev
  */
 public class Model {
     Usuario current;

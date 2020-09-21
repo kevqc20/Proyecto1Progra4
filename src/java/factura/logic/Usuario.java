@@ -1,7 +1,5 @@
 package factura.logic;
 
-import java.util.Objects;
-
 public class Usuario  implements java.io.Serializable {
 
 
@@ -17,10 +15,11 @@ public class Usuario  implements java.io.Serializable {
     public Usuario(String cedula) {
         this.identificacion = cedula;
     }
-    public Usuario(String cedula, String clave, Integer tipo) {
+    public Usuario(String cedula, String clave,Integer activo, Integer tipo) {
        this.identificacion = cedula;
        this.password = clave;
        this.tipoUsuario = tipo;
+       this.activo = activo;
     }
    
     public String getIdentificacion() {
@@ -52,24 +51,6 @@ public class Usuario  implements java.io.Serializable {
     public void setActivo(Integer activo) {
         this.activo = activo;
     }
-
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final Usuario other = (Usuario) obj;
-        return Objects.equals(this.identificacion, other.identificacion);
-    }
-    
-    
 
 }
 
