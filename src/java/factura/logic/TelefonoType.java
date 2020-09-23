@@ -13,6 +13,8 @@ public class TelefonoType {
     Integer numTelefono;
     Integer codigoPais;
 
+    public TelefonoType(){}
+    
     public TelefonoType(Integer numTelefono, Integer codigoPais) {
         this.numTelefono = numTelefono;
         this.codigoPais = codigoPais;

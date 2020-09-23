@@ -7,7 +7,8 @@ public class Usuario  implements java.io.Serializable {
      private String password;
      private Integer tipoUsuario;
      private Integer activo;
-
+     private Integer tipoID = 1;
+     
     public Usuario() {
     }
 
@@ -20,6 +21,14 @@ public class Usuario  implements java.io.Serializable {
        this.password = clave;
        this.tipoUsuario = tipo;
        this.activo = activo;
+    }
+
+    public Integer getTipoID() {
+        return tipoID;
+    }
+
+    public void setTipoID(Integer tipoID) {
+        this.tipoID = tipoID;
     }
    
     public String getIdentificacion() {
@@ -52,6 +61,12 @@ public class Usuario  implements java.io.Serializable {
         this.activo = activo;
     }
 
+    @Override
+    public String toString() {
+        return "Usuario{" + "identificacion=" + identificacion + ", password=" + password + ", tipoUsuario=" + tipoUsuario + ", activo=" + activo + '}';
+    }
+
+   
 }
 
 

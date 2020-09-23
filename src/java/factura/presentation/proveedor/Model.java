@@ -5,8 +5,10 @@
  */
 package factura.presentation.proveedor;
 
-import factura.logic.Cliente;
 import factura.logic.Proveedor;
+import factura.logic.TelefonoType;
+import factura.logic.UbicacionType;
+import factura.logic.Usuario;
 
 /**
  *
@@ -16,9 +18,17 @@ public class Model{
     Proveedor current;
 
     public Model() {
-        //current = new Proveedor("",0.0,null);
+        this.current = new Proveedor(
+                new Usuario("","",1,1), 
+                "",
+                "",
+                "",
+                new TelefonoType(0,0),
+                new UbicacionType(0,0,0,"")
+        );
     }
 
+    
     public Proveedor getCurrent() {
         return current;
     }
@@ -26,5 +36,6 @@ public class Model{
     public void setCurrent(Proveedor current) {
         this.current = current;
     }
-
+    
+    
 }

@@ -11,8 +11,26 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import factura.logic.TelefonoType;
+import java.util.NoSuchElementException;
 
 public class ServicioTelefonoType {
+
+    public void insertarTelefonoType(TelefonoType tel) {
+        try (
+                Connection cnx = obtenerConexion();
+                PreparedStatement stmt = cnx.prepareStatement(IMEC_TelefonoType.INSERTAR.obtenerComando());) {
+            stmt.clearParameters();
+            stmt.setInt(1, tel.getNumTelefono());
+            stmt.setInt(2, tel.getCodigoPais());
+            stmt.executeUpdate();
+        } catch (IOException
+                | ClassNotFoundException
+                | IllegalAccessException
+                | InstantiationException
+                | SQLException ex) {
+            System.err.printf("Excepción: '%s'%n", ex.getMessage());
+        }
+    }
 
     public Optional<TelefonoType> obtenerTelefonoType(Integer identificacion) {
         Optional<TelefonoType> r = Optional.empty();
@@ -31,6 +49,7 @@ public class ServicioTelefonoType {
         } catch (IOException
                 | ClassNotFoundException
                 | IllegalAccessException
+                | NoSuchElementException
                 | InstantiationException
                 | SQLException ex) {
             System.err.printf("Excepción: '%s'%n", ex.getMessage());
@@ -84,12 +103,14 @@ public class ServicioTelefonoType {
 
     public static void main(String[] args) {
         ServicioTelefonoType se = new ServicioTelefonoType();
+        TelefonoType e2 = new TelefonoType(123, 123);
+        se.insertarTelefonoType(e2);
+        System.out.println(e2.toString());
 
         List<TelefonoType> usuarios = se.obtenerListaTelefonoTypes();
-        int i = 0;
-        for (TelefonoType e : usuarios) {
-            System.out.printf("%4d: %d | %d  %n", ++i, e.getNumTelefono(), e.getCodigoPais());
-        }
+        usuarios.forEach((es) -> {
+            System.out.println(es.toString());
+        });
     }
 
 }

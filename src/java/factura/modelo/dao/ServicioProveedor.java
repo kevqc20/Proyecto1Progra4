@@ -17,6 +17,91 @@ import factura.logic.Usuario;
 
 public class ServicioProveedor {
 
+    public void modificarProveedor(Proveedor prov) {
+        try (
+                Connection cnx = obtenerConexion();
+                PreparedStatement stmt = cnx.prepareStatement(IMEC_Proveedor.MODIFICAR.obtenerComando()) ){
+            stmt.clearParameters();
+            stmt.setString(1, prov.getNombre());
+            stmt.setString(2, prov.getNombreComercial());
+            stmt.setString(3, prov.getCorreoElectronico());
+            stmt.setString(4, prov.getUsuario().getIdentificacion());
+            stmt.executeUpdate();
+
+        } catch (IOException
+                | ClassNotFoundException
+                | IllegalAccessException
+                | InstantiationException
+                | SQLException ex) {
+            System.err.printf("Excepción: '%s'%n", ex.getMessage());
+        }
+    }
+
+    public void insertarProveedor(Proveedor prov) {
+        try (
+                Connection cnx = obtenerConexion();
+                PreparedStatement stmt = cnx.prepareStatement(IMEC_Proveedor.INSERTAR.obtenerComando());
+                PreparedStatement stmt2 = cnx.prepareStatement(IMEC_Usuario.INSERTARID.obtenerComando());
+                PreparedStatement stmt3 = cnx.prepareStatement(IMEC_Usuario.INSERTAR.obtenerComando());
+                PreparedStatement stmt4 = cnx.prepareStatement(IMEC_TelefonoType.INSERTAR.obtenerComando());
+                PreparedStatement stmt5 = cnx.prepareStatement(IMEC_UbicacionType.INSERTAR.obtenerComando());
+                PreparedStatement stmt6 = cnx.prepareStatement(IMEC_Proveedor.UBI_ID.obtenerComando());) {
+
+            // Creacion del ID
+            stmt2.clearParameters();
+            stmt2.setInt(1, Integer.valueOf(prov.getUsuario().getIdentificacion()));
+            stmt2.setInt(2, prov.getUsuario().getTipoID());
+            stmt2.executeUpdate();
+
+            // Creacion del Usuario
+            stmt3.clearParameters();
+            stmt3.setInt(1, Integer.valueOf(prov.getUsuario().getIdentificacion()));
+            stmt3.setString(2, prov.getUsuario().getPassword());
+            stmt3.setInt(3, prov.getUsuario().getActivo());
+            stmt3.setInt(4, prov.getUsuario().getTipoUsuario());
+            stmt3.executeUpdate();
+
+            // Creacion del TelefonoType
+            stmt4.clearParameters();
+            stmt4.setInt(1, prov.getTelefono().getNumTelefono());
+            stmt4.setInt(2, prov.getTelefono().getCodigoPais());
+            stmt4.executeUpdate();
+
+            // Creacion de la UbicacionType
+            stmt5.clearParameters();
+            stmt5.setInt(1, prov.getUbicacion().getProvincia());
+            stmt5.setInt(2, prov.getUbicacion().getCanton());
+            stmt5.setInt(3, prov.getUbicacion().getDistrito());
+            stmt5.setString(4, prov.getUbicacion().getOtrasSenas());
+            stmt5.executeUpdate();
+
+            int ubi_id = 0;
+            try (ResultSet rs = stmt6.executeQuery()) {
+                if (rs.next()) {
+                    ubi_id = rs.getInt("ID");
+                    prov.getUbicacion().setId(ubi_id);
+                }
+            }
+
+            // Creacion del Proveedor
+            stmt.clearParameters();
+            stmt.setInt(1, Integer.valueOf(prov.getUsuario().getIdentificacion()));
+            stmt.setString(2, prov.getNombre());
+            stmt.setString(3, prov.getNombreComercial());
+            stmt.setString(4, prov.getCorreoElectronico());
+            stmt.setInt(5, prov.getTelefono().getNumTelefono());
+            stmt.setInt(6, ubi_id);
+            stmt.executeUpdate();
+
+        } catch (IOException
+                | ClassNotFoundException
+                | IllegalAccessException
+                | InstantiationException
+                | SQLException ex) {
+            System.err.printf("Excepción: '%s'%n", ex.getMessage());
+        }
+    }
+
     public Optional<Proveedor> obtenerProveedor(String identificacion) {
         Optional<Proveedor> r = Optional.empty();
         try (Connection cnx = obtenerConexion();
@@ -193,9 +278,36 @@ public class ServicioProveedor {
     public static void main(String[] args) {
         ServicioProveedor se = new ServicioProveedor();
 
+        Usuario user = new Usuario(
+                "666",
+                "666",
+                0, 1
+        );
+        TelefonoType tel = new TelefonoType(
+                6666,
+                666
+        );
+        UbicacionType ubi = new UbicacionType(
+                6,
+                6,
+                6,
+                "hell"
+        );
+        Proveedor prov = new Proveedor(
+                user,
+                "sat",
+                "baal",
+                "sat@baal.com",
+                tel,
+                ubi
+        );
+
+        se.modificarProveedor(prov);
+
         List<Proveedor> usuarios = se.obtenerListaProveedors();
-        usuarios.forEach((e) -> {
-            System.out.println(e.toString());
+        usuarios.forEach((es) -> {
+            System.out.println("--------------------------");
+            System.out.println(es.toString());
         });
     }
 

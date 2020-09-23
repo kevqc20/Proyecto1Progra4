@@ -6,8 +6,9 @@
 package factura.presentation.proveedor;
 
 import factura.logic.Proveedor;
+import factura.logic.TelefonoType;
+import factura.logic.UbicacionType;
 import factura.logic.Usuario;
-import factura.presentation.proveedor.Model;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -18,71 +19,100 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-
-@WebServlet(name = "ProveedorCuentaController", urlPatterns = {"/presentation/cliente/cuenta/show"})
+@WebServlet(name = "ProveedorDatosController", urlPatterns = {"/presentation/proveedor/configuracion/show", "/presentation/proveedor/configuracion/update"})
 public class Controller extends HttpServlet {
-    
-  protected void processRequest(HttpServletRequest request, 
-                                HttpServletResponse response)
-         throws ServletException, IOException {
-           
-        request.setAttribute("model", new Model());
-        
-        String viewUrl="";     
-        switch (request.getServletPath()) {
-          case "/presentation/cliente/cuenta/show":
-              //viewUrl = this.show(request);
-              break;
-        }          
-        request.getRequestDispatcher(viewUrl).forward( request, response); 
-  }
 
-   /* public String show(HttpServletRequest request) {
-        try{
-            Map<String,String> errores =  this.validar(request);
-            if(errores.isEmpty()){
-                this.updateModel(request);          
-                return this.showAction(request);
-            }
-            else{
-                request.setAttribute("errores", errores);
-                return "/presentation/cliente/datos/View.jsp"; 
-            }            
+    protected void processRequest(HttpServletRequest request,
+            HttpServletResponse response)
+            throws ServletException, IOException {
+
+        request.setAttribute("model", new Model());
+
+        String viewUrl = "";
+        switch (request.getServletPath()) {
+            case "/presentation/proveedor/configuracion/show":
+                viewUrl = this.show(request);
+                break;
+            case "/presentation/proveedor/configuracion/update":
+                viewUrl = this.update(request);
+                break;
         }
-        catch(Exception e){
-            return "/presentation/Error.jsp";             
-        }   
+        request.getRequestDispatcher(viewUrl).forward(request, response);
     }
-*/
-    Map<String,String> validar(HttpServletRequest request){
-        Map<String,String> errores = new HashMap<>();
-        if (request.getParameter("numeroFld").isEmpty()){
-            errores.put("numeroFld","Cuenta requerida");
-        }
-        return errores;
+
+    public String show(HttpServletRequest request) {
+        return this.showAction(request);
     }
-    /*
-    void updateModel(HttpServletRequest request){
-       banca.presentation.cliente.cuenta.Model model= (banca.presentation.cliente.cuenta.Model) request.getAttribute("model");
-       
-        model.getCurrent().setNumero(request.getParameter("numeroFld"));
-   }    
-    
+
     public String showAction(HttpServletRequest request) {
         Model model = (Model) request.getAttribute("model");
-        banca.logic.Model domainModel = banca.logic.Model.instance();
+        factura.logic.Model domainModel = factura.logic.Model.instance();
         HttpSession session = request.getSession(true);
         Usuario usuario = (Usuario) session.getAttribute("usuario");
-        try {        
-            model.setCurrent(domainModel.cuentaFind(model.getCurrent().getNumero()));
-            if (!(model.getCurrent().getProveedor().getCedula().equals(usuario.getCedula()))) 
-                throw new Exception("Cuenta no pertenece al cliente");
-            return "/presentation/cliente/cuenta/View.jsp";
+        Proveedor proveedor;
+        try {
+            proveedor = domainModel.getServProveedor().obtenerProveedor(usuario.getIdentificacion()).get();
         } catch (Exception ex) {
-            return "/presentation/Error.jsp";
+            proveedor = null;
+            System.err.printf("Exception: '%s'%n", ex.getMessage());
         }
-    }*/
-   
+        try {
+            model.setCurrent(proveedor);
+            return "/presentation/proveedor/configuracion/View.jsp";
+        } catch (Exception ex) {
+            System.err.printf("Exception: '%s'%n", ex.getMessage());
+            return "";
+        }
+    }
+
+    private String update(HttpServletRequest request) {
+        try {
+            Model model = (Model) request.getAttribute("model");
+            HttpSession session = request.getSession(true);
+            Usuario usuario = (Usuario) session.getAttribute("usuario");
+            model.getCurrent().setUsuario(usuario);
+            this.updateModel(request);
+            return this.updateAction(request);
+            
+        } catch (Exception e) {
+            System.err.printf("Exception: '%s'%n", e.getMessage());
+            return "/presentation/proveedor/configuracion/show";
+        }
+    }
+
+    void updateModel(HttpServletRequest request) {
+        Model model = (Model) request.getAttribute("model");
+        HttpSession session = request.getSession(true);
+        Usuario usuario = (Usuario) session.getAttribute("usuario");
+        model.getCurrent().getUsuario().setIdentificacion(usuario.getIdentificacion());
+        model.getCurrent().getUsuario().setPassword(usuario.getPassword());
+        model.getCurrent().getTelefono().setCodigoPais(Integer.valueOf(request.getParameter("codFld")));
+        model.getCurrent().getTelefono().setNumTelefono(Integer.valueOf(request.getParameter("telFld")));
+        model.getCurrent().getUbicacion().setProvincia(Integer.valueOf(request.getParameter("provinciaFld")));
+        model.getCurrent().getUbicacion().setCanton(Integer.valueOf(request.getParameter("cantonFld")));
+        model.getCurrent().getUbicacion().setDistrito(Integer.valueOf(request.getParameter("distritoFld")));
+        model.getCurrent().getUbicacion().setOtrasSenas(request.getParameter("otrasSenasFld"));
+        model.getCurrent().setNombre(request.getParameter("nombFld"));
+        model.getCurrent().setNombreComercial(request.getParameter("nombComFld"));
+        model.getCurrent().setCorreoElectronico(request.getParameter("emailFld"));
+        
+        request.setAttribute("model", model);
+    }
+
+    public String updateAction(HttpServletRequest request) {
+        Model model = (Model) request.getAttribute("model");
+        factura.logic.Model domainModel = factura.logic.Model.instance();
+        HttpSession session = request.getSession(true);
+        try {
+            session.setAttribute("proveedor", model.getCurrent());
+            domainModel.getServProveedor().modificarProveedor(model.getCurrent());
+            return "/presentation/Idle.jsp";
+        } catch (Exception ex) {
+            System.err.printf("Exception: '%s'%n", ex.getMessage());
+            return "/presentation/proveedor/configuracion/View.jsp";
+        }
+    }
+
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
@@ -121,5 +151,5 @@ public class Controller extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
-    
+
 }

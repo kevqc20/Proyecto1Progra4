@@ -1,9 +1,9 @@
 package factura.modelo.dao;
 
 public enum IMEC_UbicacionType {
-//    INSERTAR("INSERT INTO estudiante (id, apellidos, nombre) VALUES (?, ?, ?); "),
-//    MODIFICAR("UPDATE estudiante SET apellidos=?, nombre=? WHERE id=?; "),
-//    EXCLUIR("DELETE FROM estudiante WHERE id=?; "),
+    INSERTAR("INSERT INTO `proyecto1`.`ubicaciontype`(`provincia`,`canton`,`distrito`,`otrasSenas`) VALUES(?,?,?,?);"),
+    //    MODIFICAR("UPDATE estudiante SET apellidos=?, nombre=? WHERE id=?; "),
+    //    EXCLUIR("DELETE FROM estudiante WHERE id=?; "),
     CONSULTAR("SELECT * FROM ubicaciontype WHERE id=?; "),
     LISTAR("SELECT * FROM ubicaciontype ORDER BY id; ");
 

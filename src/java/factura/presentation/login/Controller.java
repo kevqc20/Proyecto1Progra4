@@ -94,7 +94,11 @@ public class Controller extends HttpServlet {
                         viewUrl = "/presentation/administrador/listarProveedores/show";
                         break;
                     case 1:
-                        viewUrl = "/presentation/proveedor/configuracion/View.jsp";
+                        if (real.getActivo() == 1) {
+                            viewUrl = "/presentation/Idle.jsp";
+                        } else {
+                            viewUrl = "/presentation/registro/Completed.jsp";
+                        }
                         break;
                 }
                 session.setAttribute("usuario", real);
@@ -108,7 +112,7 @@ public class Controller extends HttpServlet {
             request.setAttribute("errores", errores);
             errores.put("cedulaFld", "Usuario o clave incorrectos");
             errores.put("claveFld", "Usuario o clave incorrectos");
-            return "/presentation/login/show";
+            return "/presentation/login/View.jsp";
         }
     }
 
@@ -118,9 +122,12 @@ public class Controller extends HttpServlet {
 
     public String logoutAction(HttpServletRequest request) {
         HttpSession session = request.getSession(true);
+        Model model = (Model) request.getAttribute("model");
+        model.getCurrent().setIdentificacion("");
+        model.getCurrent().setPassword("");
         session.removeAttribute("usuario");
         session.invalidate();
-        return "/presentation/login/show";
+        return "/presentation/Index.jsp";
     }
 
     public String show(HttpServletRequest request) {

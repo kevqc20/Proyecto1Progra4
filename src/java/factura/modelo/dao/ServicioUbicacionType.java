@@ -13,6 +13,25 @@ import java.util.Optional;
 import factura.logic.UbicacionType;
 
 public class ServicioUbicacionType {
+    
+    public void insertarUbicacionType(UbicacionType ubi) {
+        try (
+                Connection cnx = obtenerConexion();
+                PreparedStatement stmt = cnx.prepareStatement(IMEC_UbicacionType.INSERTAR.obtenerComando());) {
+            stmt.clearParameters();
+            stmt.setInt(1, ubi.getProvincia());
+            stmt.setInt(2, ubi.getCanton());
+            stmt.setInt(3, ubi.getDistrito());
+            stmt.setString(4, ubi.getOtrasSenas());
+            stmt.executeUpdate();
+        } catch (IOException
+                | ClassNotFoundException
+                | IllegalAccessException
+                | InstantiationException
+                | SQLException ex) {
+            System.err.printf("Excepción: '%s'%n", ex.getMessage());
+        }
+    }
 
     public Optional<UbicacionType> obtenerUbicacionType(Integer identificacion) {
         Optional<UbicacionType> r = Optional.empty();
@@ -89,12 +108,14 @@ public class ServicioUbicacionType {
 
     public static void main(String[] args) {
         ServicioUbicacionType se = new ServicioUbicacionType();
+        UbicacionType e2 = new UbicacionType(2,2,2,"-");
+        se.insertarUbicacionType(e2);
+        System.out.println(e2.toString());
 
         List<UbicacionType> usuarios = se.obtenerListaUbicacionTypes();
-        int i = 0;
-        for (UbicacionType e : usuarios) {
-            System.out.printf("%4d: %d  %n", ++i, e.getId());
-        }
+        usuarios.forEach((es) -> {
+            System.out.println(es.toString());
+        });
     }
 
 }

@@ -5,7 +5,9 @@
  */
 package factura.presentation.registro;
 
-import factura.presentation.login.*;
+import factura.logic.Proveedor;
+import factura.logic.TelefonoType;
+import factura.logic.UbicacionType;
 import factura.logic.Usuario;
 
 /**
@@ -13,21 +15,24 @@ import factura.logic.Usuario;
  * @author kev
  */
 public class Model {
-    Usuario current;
+    Usuario user;
+    TelefonoType tel;
+    UbicacionType ubi;
+    Proveedor current = null;
 
     public Model() {
         this.reset();
     }
     
     public void reset(){
-        setCurrent(new Usuario());        
+        setCurrent(new Proveedor());        
     }
     
-    public Usuario getCurrent() {
+    public Proveedor getCurrent() {
         return current;
     }
 
-    public void setCurrent(Usuario current) {
+    public void setCurrent(Proveedor current) {
         this.current = current;
     }
    

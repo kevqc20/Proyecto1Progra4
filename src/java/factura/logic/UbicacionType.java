@@ -25,6 +25,13 @@ public class UbicacionType {
         this.otrasSenas = otrasSenas;
     }
 
+    public UbicacionType(Integer provincia, Integer canton, Integer distrito, String otrasSenas) {
+        this.provincia = provincia;
+        this.canton = canton;
+        this.distrito = distrito;
+        this.otrasSenas = otrasSenas;
+    }
+
     public Integer getId() {
         return id;
     }
@@ -70,5 +77,4 @@ public class UbicacionType {
         return "UbicacionType{" + "id=" + id + ", provincia=" + provincia + ", canton=" + canton + ", distrito=" + distrito + ", otrasSenas=" + otrasSenas + '}';
     }
 
-    
 }

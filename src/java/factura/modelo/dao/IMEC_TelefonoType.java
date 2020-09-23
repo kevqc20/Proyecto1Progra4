@@ -1,7 +1,7 @@
 package factura.modelo.dao;
 
 public enum IMEC_TelefonoType {
-//    INSERTAR("INSERT INTO estudiante (id, apellidos, nombre) VALUES (?, ?, ?); "),
+    INSERTAR("INSERT INTO `proyecto1`.`telefonotype`(`numTelefono`,`codigoPais`)VALUES(?, ?);"),
 //    MODIFICAR("UPDATE estudiante SET apellidos=?, nombre=? WHERE id=?; "),
 //    EXCLUIR("DELETE FROM estudiante WHERE id=?; "),
     CONSULTAR("SELECT * FROM telefonotype WHERE numTelefono=?; "),
