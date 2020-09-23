@@ -23,18 +23,31 @@
         <title>Página principal</title>    
         <%@ include file="/presentation/Header.jsp" %>
     </head>
-    <body>              
+    <body>     
         <div class="login-form">
             <form name="form" action="" method="post">
 
+                <% if (usuario != null && usuario.getTipoUsuario() == 0) { %>
+                <div class="form-group">
+                    <a href= "/Proyecto1/presentation/administrador/listarProveedores/show" class="btn btn-primary btn-block">Listado de proveedores</a>
+                </div>
+                <% }%>
+
+                <% if (usuario != null && usuario.getTipoUsuario() == 1 && usuario.getActivo() == 1) { %>
                 <div class="form-group">
                     <a href="/Proyecto1/presentation/proveedor/configuracion/show" class="btn btn-primary btn-block">Perfil</a>
                 </div>
                 <div class="form-group">
-                    <a href="/Proyecto1/presentation/proveedor/registroClientes/View.jsp" class="btn btn-primary btn-block">Clientes frecuentes</a>
+                    <a href="/Proyecto1/presentation/proveedor/listarClientes/View.jsp" class="btn btn-primary btn-block">Listado de clientes frecuentes</a>
                 </div>
                 <div class="form-group">
-                    <a href="/Proyecto1/presentation/proveedor/registroServicios/View.jsp" class="btn btn-primary btn-block">Servicios</a>
+                    <a href="/Proyecto1/presentation/proveedor/registroClientes/View.jsp" class="btn btn-primary btn-block">Registrar cliente frecuente</a>
+                </div>
+                <div class="form-group">
+                    <a href="/Proyecto1/presentation/proveedor/registroServicios/View.jsp" class="btn btn-primary btn-block">Listado de servicios</a>
+                </div>
+                <div class="form-group">
+                    <a href="/Proyecto1/presentation/proveedor/registroServicios/View.jsp" class="btn btn-primary btn-block">Registrar servicio</a>
                 </div>
                 <div class="form-group">
                     <a href="/Proyecto1/presentation/proveedor/listarFacturas/View.jsp" class="btn btn-primary btn-block">Listado de facturas</a>
@@ -42,6 +55,7 @@
                 <div class="form-group">
                     <a href="/Proyecto1/presentation/proveedor/facturar/View.jsp" class="btn btn-primary btn-block">Facturar</a>
                 </div>
+                <% }%>
             </form>
         </div>
     </body>

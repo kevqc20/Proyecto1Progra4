@@ -8,7 +8,12 @@
 <header>
     <nav class="navbar navbar-expand-md navbar-dark bg-dark mb-3">
         <div class="container-fluid">
-            <a class="navbar-brand mr-3">Factura Electrónica</a>
+            
+            <% if (usuario != null) {%>
+            <a href="/Proyecto1/presentation/Idle.jsp" class="navbar-brand mr-3">Factura Electrónica</a>
+            <% } else {%>
+             <a href="/Proyecto1/presentation/login/show" class="navbar-brand mr-3">Factura Electrónica</a>
+             <% } %>
             <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -27,8 +32,10 @@
                     
                     <% if (usuario != null && usuario.getTipoUsuario() == 1 && usuario.getActivo() == 1) { %>
                     <a href="/Proyecto1/presentation/proveedor/configuracion/show" class="nav-item nav-link">Perfil</a>
-                    <a href="/Proyecto1/presentation/proveedor/registroClientes/View.jsp" class="nav-item nav-link">Clientes frecuentes</a>
-                    <a href="/Proyecto1/presentation/proveedor/registroServicios/View.jsp" class="nav-item nav-link">Servicios</a>
+                    <a href="/Proyecto1/presentation/proveedor/listarClientes/View.jsp" class="nav-item nav-link">Listar clientes frecuentes</a>
+                    <a href="/Proyecto1/presentation/proveedor/registroClientes/View.jsp" class="nav-item nav-link">Registrar cliente frecuente</a>
+                    <a href="/Proyecto1/presentation/proveedor/listarServicios/View.jsp" class="nav-item nav-link">Listar servicios</a>
+                    <a href="/Proyecto1/presentation/proveedor/registroServicios/View.jsp" class="nav-item nav-link">Registrar servicio</a>
                     <a href="/Proyecto1/presentation/proveedor/listarFacturas/View.jsp" class="nav-item nav-link">Listado de facturas</a>
                     <a href="/Proyecto1/presentation/proveedor/facturar/View.jsp" class="nav-item nav-link">Facturar</a>
                     </div>

@@ -91,7 +91,7 @@ public class Controller extends HttpServlet {
             if (real.getPassword() == null ? request.getParameter("claveFld") == null : real.getPassword().equals(request.getParameter("claveFld"))) {
                 switch (real.getTipoUsuario()) {
                     case 0:
-                        viewUrl = "/presentation/administrador/listarProveedores/show";
+                        viewUrl = "/presentation/Idle.jsp";
                         break;
                     case 1:
                         if (real.getActivo() == 1) {
