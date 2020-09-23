@@ -112,7 +112,7 @@ public class Controller extends HttpServlet {
             request.setAttribute("errores", errores);
             errores.put("cedulaFld", "Usuario o clave incorrectos");
             errores.put("claveFld", "Usuario o clave incorrectos");
-            return "/presentation/login/View.jsp";
+            return "/presentation/login/show";
         }
     }
 

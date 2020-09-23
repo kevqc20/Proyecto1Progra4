@@ -21,6 +21,7 @@ public class Model {
     private final ServicioTelefonoType servTelType;
     private final ServicioUbicacionType servUbiType;
     
+    
     public static Model instance(){
         if (uniqueInstance == null){
             uniqueInstance = new Model();
